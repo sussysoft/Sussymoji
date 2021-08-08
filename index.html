@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Susmoji</title>
+    <link rel="stylesheet" href="style.css"></style>
+
+    <script defer="defer" src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script defer="defer" type="module" src="/scripts/main.js"></script>
+</head>
+<body>
+    <div id="canvas">
+        <canvas id="emoji"></canvas>
+        <canvas id="sussy"></canvas>
+    </div>
+
+
+    <div id="controls" class="flex row">
+
+        <div id="dpad" class="flex row">
+            <button data-dir="left">LEFT</button>
+            <div class="flex column">
+                <button data-dir="up">UP</button>
+                <button data-dir="down">DOWN</button>
+            </div>
+            <button data-dir="right">RIGHT</button>
+        </div>
+    
+        <div class="flex column">
+            <input id="txtEmoji" type="text" value="😳" />
+            <input id="txtSize" type="number" value="128" />
+            <input id="txtColor" type="color" value="#ff0000" />
+        </div>
+
+    </div>
+    
+</body>
+</html>
