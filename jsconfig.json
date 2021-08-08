@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "checkJs": true,
       "lib": [ "es6", "dom", "es2017" ],
       "target": "es2017",
   
@@ -15,13 +16,12 @@
       "allowUnreachableCode": false,
       "allowUnusedLabels": false,
       "alwaysStrict": true,
-      "noUnusedLocals": true,
-
-      
-
+      "noUnusedLocals": true
     },
        
     "typeAcquisition": {
       "include": ["jquery"]
-    }
+    },
+
+    "include": ["scripts"]
   }
