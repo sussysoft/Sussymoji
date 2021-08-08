@@ -11,27 +11,26 @@
     <script defer="defer" type="module" src="scripts/main.js"></script>
 </head>
 <body>
-    <div id="canvas">
-        <canvas id="emoji"></canvas>
-        <canvas id="sussy"></canvas>
+    <div id="container">
+        <canvas></canvas>
+        <input id="vert" type="range" min="0" max="1000" />
+        <input id="horiz" type="range" min="0" max="1000" />
     </div>
 
 
     <div id="controls" class="flex row">
 
-        <div id="dpad" class="flex row">
-            <button data-dir="left">LEFT</button>
-            <div class="flex column">
-                <button data-dir="up">UP</button>
-                <button data-dir="down">DOWN</button>
-            </div>
-            <button data-dir="right">RIGHT</button>
+        <div>
+            <label>Emoji</label>
+            <input id="emoji" type="text" value="😳" />
         </div>
-    
-        <div class="flex column">
-            <input id="txtEmoji" type="text" value="😳" />
-            <input id="txtSize" type="number" value="128" />
-            <input id="txtColor" type="color" value="#ff0000" />
+        <div>
+            <label>Size</label>
+            <input id="size" type="range" min="48" value="128" max="200" />
+        </div>
+        <div>
+            <label>Color</label>
+            <input id="color" type="color" value="#ff0000" />
         </div>
 
         <button id="btnDownload">DOWNLOAD</button>

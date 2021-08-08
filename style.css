@@ -1,16 +1,16 @@
-body {
-    background: #222;
-}
+body { background: #222; }
 
-#canvas {
+#container {
     display: block;
     background: white;
     margin: 0 auto;
     position: relative;
     max-width: 100%;
+    border: 20px solid;
+    border-image: repeating-linear-gradient(45deg,#be4c4c,#be4040 10px,#9c2e2e 10px,#9e2d2d 20px) 20;
 
 }
-#canvas > canvas {
+#container > canvas {
     position: absolute;
     top: 0;
     left: 0;
@@ -34,7 +34,25 @@ body {
     column-gap: 1em;
 }
 
-button {
+#controls > div {
+    display: flex;
+    flex-direction: column;
+}
+#controls > div > label {
+    color: white;
+    text-align: center;
+}
+
+#controls input {
+    height: 2em;
+    margin: 2px;
+}
+
+#emoji { width: 4em; }
+#size { width: 6em; }
+
+/* #region buttons */
+#controls button {
     border: none;
     outline: none;
     border-radius: 0.25em;
@@ -42,39 +60,36 @@ button {
     margin: 2px;
     user-select: none;
 }
-button:not(:disabled) {
+#controls button:not(:disabled) {
     cursor: pointer;
 }
 @media (hover:hover) {
-    button:hover {
+    #controls button:hover {
         background: #333;
         color: white;
         border: 3px solid white;
         font-weight: bold;
     }
 }
-
-/* #region dpad */
-#dpad {
-    justify-content: center;
-    align-items: flex-end;
-}
-#dpad button {
-    width: 5em;
-}
-/* #endregion */
-
-#controls input {
-    width: 4em;
-    height: 2em;
-    margin: 2px;
-}
-/* #endregion */
-
-
 #btnDownload {
     background: #3ea73e;
     font-weight: bold;
     color: white;
     border: 1px solid white;
 }
+/* #endregion */
+
+#container input {
+    position: absolute;
+    bottom: 0;
+    width: 15em;
+}
+#horiz {
+    left: 1em;
+}
+#vert {
+    left: 0;
+    transform-origin: top left;
+    transform: rotate(-90deg);
+ }
+/* #endregion */
