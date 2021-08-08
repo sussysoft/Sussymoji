@@ -1,57 +1,102 @@
-export const currentEmoji = document.getElementById("currentEmoji");
-const emojiContainer = document.getElementById("emojiContainer");
-const emojiDropdown = document.getElementById("emojiDropdown");
+export default class EmojiPicker {
+	/** @type {HTMLDivElement} #node */
+	#node;
+	/** @type {HTMLDivElement} #emojiContainer */
+	#emojiContainer;
+	/** @type {HTMLSpanElement} #currentEmoji */
+	#currentEmoji;
+	/** @type {HTMLButtonElement} #emojiDropDown */
+	#emojiDropdown;
 
-function showEmojiContainer() {
-	emojiContainer.classList.remove("hidden");
-	emojiDropdown.querySelector(".caret").textContent = "\u25B2";
-}
+	value = "\u{1F600}";
 
-function hideEmojiContainer() {
-	emojiContainer.classList.add("hidden");
-	emojiDropdown.querySelector(".caret").textContent = "\u25BC";
-}
+	/**
+	 *  @callback EmojiChangeCallback
+	 *  @param {String} value
+	 *  @returns {void}
+	 *  @type {EmojiChangeCallback} onChange
+	 */
+	onChange;
 
-/**
- * @param {HTMLElement} node
- */
-function emojiClickHandler(node) {
-	currentEmoji.innerText = node.dataset.value;
-	currentEmoji.dataset.value = node.dataset.value;
-	currentEmoji.dispatchEvent(new CustomEvent("change"));
-	hideEmojiContainer();
-}
+	/** @param {String} id Id of DOM element to generate the picker in */
+	constructor(id) {
+		// Get DOM nodes
+		// @ts-ignore
+		this.#node = document.getElementById(id);
+		this.#generateHTML();
 
-// Populate the emoji container with the basic emojis
-function getEmojis() {
-	const emojiPicker = document.getElementById("emojiContainer");
-	for (let i = 0x1f600; i <= 0x1f644; i++) {
-		const container = document.createElement("div");
-		container.classList.add("emoji");
-		const symbol = String.fromCodePoint(i);
-		container.dataset.value = symbol;
-		// Add the onclick event to each emoji
-		container.addEventListener("click", (e) =>
-			emojiClickHandler(container)
+		// Populate container
+		this.#getEmojis();
+
+		// Register event listeners
+		this.#emojiDropdown.addEventListener("click", (e) => {
+			e.stopPropagation();
+			if (this.#emojiContainer.classList.contains("hidden"))
+				this.#showEmojiContainer();
+			else this.#hideEmojiContainer();
+		});
+
+		this.#emojiContainer.addEventListener("click", (e) =>
+			e.stopPropagation()
 		);
-		const emoji = document.createTextNode(`${symbol}`);
-		container.appendChild(emoji);
-		emojiPicker.appendChild(container);
+
+		document.addEventListener("click", (e) => {
+			this.#hideEmojiContainer();
+		});
 	}
-}
 
-export function init() {
-	getEmojis();
+	#generateHTML() {
+		this.#node.classList.add("emoji-picker");
+		this.#emojiDropdown = document.createElement("button");
+		this.#emojiDropdown.classList.add("select");
+		this.#currentEmoji = document.createElement("span");
+		this.#currentEmoji.appendChild(document.createTextNode(this.value));
+		this.#emojiDropdown.appendChild(this.#currentEmoji);
+		this.#emojiDropdown.appendChild(document.createTextNode("\u00a0"));
+		const caret = document.createElement("span");
+		caret.classList.add("caret");
+		caret.appendChild(document.createTextNode("\u25BC"));
+		this.#emojiDropdown.appendChild(caret);
+		this.#node.appendChild(this.#emojiDropdown);
+		this.#emojiContainer = document.createElement("div");
+		this.#emojiContainer.classList.add("container");
+		this.#emojiContainer.classList.add("hidden");
+		this.#node.appendChild(this.#emojiContainer);
+	}
 
-	emojiDropdown.addEventListener("click", (e) => {
-		e.stopPropagation();
-		if (emojiContainer.classList.contains("hidden")) showEmojiContainer();
-		else hideEmojiContainer();
-	});
+	#getEmojis() {
+		for (let i = 0x1f600; i <= 0x1f644; i++) {
+			const container = document.createElement("div");
+			container.classList.add("emoji");
+			const symbol = String.fromCodePoint(i);
+			container.dataset.value = symbol;
+			// Add the onclick event to each emoji
+			container.addEventListener("click", () =>
+				this.#emojiClickHandler(container)
+			);
+			const emoji = document.createTextNode(`${symbol}`);
+			container.appendChild(emoji);
+			this.#emojiContainer.appendChild(container);
+		}
+	}
 
-	emojiContainer.addEventListener("click", (e) => e.stopPropagation());
+	#showEmojiContainer() {
+		this.#emojiContainer.classList.remove("hidden");
+		this.#emojiDropdown.querySelector(".caret").textContent = "\u25B2";
+	}
 
-	document.addEventListener("click", (e) => {
-		hideEmojiContainer();
-	});
+	#hideEmojiContainer() {
+		this.#emojiContainer.classList.add("hidden");
+		this.#emojiDropdown.querySelector(".caret").textContent = "\u25BC";
+	}
+
+	/** @param {HTMLElement} htmlElement */
+	#emojiClickHandler(htmlElement) {
+		this.#currentEmoji.innerText = htmlElement.dataset.value;
+		this.value = htmlElement.dataset.value;
+		this.#hideEmojiContainer();
+		if (typeof this.onChange !== "undefined") {
+			this.onChange(this.value);
+		}
+	}
 }

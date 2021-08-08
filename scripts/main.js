@@ -1,5 +1,5 @@
 import { getImage } from "../modules/img.js";
-import { init as emojiPickerInit, currentEmoji } from "./emojiPicker.js";
+import EmojiPicker from "./emojiPicker.js";
 const container = document.getElementById("container");
 const canvas = document.getElementsByTagName("canvas")[0];
 const ctx = canvas.getContext("2d");
@@ -37,8 +37,8 @@ const emoji = {
 	},
 };
 
+const emojiPicker = new EmojiPicker("emojiPicker");
 function init() {
-	emojiPickerInit();
 	// scaling canvas
 	sussy.base.width /= 4;
 	sussy.base.height /= 4;
@@ -78,10 +78,10 @@ function init() {
 		render();
 	});
 
-	currentEmoji.addEventListener("change", () => {
-		emoji.value = currentEmoji.dataset.value;
+	emojiPicker.onChange = (emojiVal) => {
+		emoji.value = emojiVal;
 		render();
-	});
+	};
 
 	// change color -> generate new colored sussy
 	$("#color")

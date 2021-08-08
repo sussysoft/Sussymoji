@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Susmoji</title>
     <link rel="stylesheet" href="style.css"></style>
-
+    <link rel="stylesheet" href="emojiPicker.css"></style>
     <script defer="defer" src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script defer="defer" type="module" src="scripts/main.js"></script>
 </head>
@@ -23,15 +23,7 @@
         <div>
             <label>Emoji</label>
             <input id="emoji" hidden />
-            <div class="emoji-picker">
-                <input id="emoji" hidden />
-                <button class="select" id="emojiDropdown">
-                    <span id="currentEmoji">&#x1F600;</span>
-                    &nbsp;
-                    <span class="caret">&#9660;</span>
-                </button>
-                <div class="container hidden" id="emojiContainer"></div>
-            </div>
+            <div id="emojiPicker"></div>
         </div>
         <div>
             <label>Size</label>
