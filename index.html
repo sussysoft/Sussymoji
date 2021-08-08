@@ -22,7 +22,16 @@
 
         <div>
             <label>Emoji</label>
-            <input id="emoji" type="text" value="😳" />
+            <input id="emoji" hidden />
+            <div class="emoji-picker">
+                <input id="emoji" hidden />
+                <button class="select" id="emojiDropdown">
+                    <span id="currentEmoji">&#x1F600;</span>
+                    &nbsp;
+                    <span class="caret">&#9660;</span>
+                </button>
+                <div class="container hidden" id="emojiContainer"></div>
+            </div>
         </div>
         <div>
             <label>Size</label>
