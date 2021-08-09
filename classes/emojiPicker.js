@@ -1,3 +1,7 @@
+import { importCSS } from "../modules/css.js";
+importCSS("styles/emojiPicker.css")
+
+
 export default class EmojiPicker {
 	/** @type {HTMLElement} #node */
 	#node;
@@ -18,10 +22,10 @@ export default class EmojiPicker {
 	 */
 	onChange;
 
-	/** @param {String} id Id of DOM element to generate the picker in */
-	constructor(id) {
+	/** @param {HTMLElement} el DOM element to generate the picker in */
+	constructor(el) {
 		// Get DOM nodes
-		this.#node = document.getElementById(id);
+		this.#node = el;
 		this.#generateHTML();
 
 		// Populate container

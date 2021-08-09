@@ -1,4 +1,10 @@
-body { background: #222; }
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap%27');
+
+body {
+     background: #222;
+     font-family: 'Open Sans', sans-serif;
+}
+button:not(:disabled) { cursor: pointer; }
 
 #container {
     display: block;
@@ -19,11 +25,6 @@ body { background: #222; }
     max-width: 100%;
 }
 
-
-.flex { display: flex }
-.row { flex-direction: row; }
-.column { flex-direction: column; }
-.center { align-items: center; }
 
 
 /* #region controls */
@@ -60,9 +61,6 @@ body { background: #222; }
     margin: 2px;
     user-select: none;
 }
-#controls button:not(:disabled) {
-    cursor: pointer;
-}
 @media (hover:hover) {
     #controls button:hover {
         background: #333;
@@ -93,3 +91,9 @@ body { background: #222; }
  }
 /* #endregion */
 
+
+#face {
+    min-width: 50px;
+    min-height: 50px;
+    background: black;
+}
