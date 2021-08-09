@@ -262,6 +262,7 @@ class EmojiPopup extends Popup {
 			icon: "face",
 			pad: "none",
 			nomaximize: true,
+			fullscreen: "mobile",
 			init: () => picker = new EmojiPicker("emojiPicker", emojiCarryover),
 			cancel: true,
 			ok: function () {
