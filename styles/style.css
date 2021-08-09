@@ -94,7 +94,6 @@ button:not(:disabled) { cursor: pointer; }
 
 
 #face {
-    min-width: 50px;
-    min-height: 50px;
+    height: 50px;
     background: black;
 }

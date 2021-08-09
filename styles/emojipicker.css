@@ -1,9 +1,11 @@
 .emoji-picker {
 	font-size: 1.5em;
 	position: relative;
-	margin: auto;
+	width: 100%;
 }
-
+.emoji-picker > * {
+	box-sizing: border-box;
+}
 .emoji-picker .container {
 	border-radius: 0 5px;
 	background-color: #eee;
@@ -11,12 +13,10 @@
 	padding: 5px;
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: 1fr;
-	grid-template-areas: "search search search search search search";
 	grid-auto-flow: row;
-	width: min-content;
+	width: 100%;
 	min-width: 200px;
-	max-height: 200px;
+	max-height: 600px;
 	overflow-y: scroll;
 	opacity: 1;
 	transition: all ease-in-out 200ms;
@@ -24,7 +24,7 @@
 
 .emoji-picker input.search {
 	grid-area: search;
-	border-radius: 2em;
+	width: 100%;
 	outline: none;
 	border: none;
 	padding: 5px 15px;
@@ -32,6 +32,7 @@
 	color: #666;
 	position: sticky;
 	top: 0px;
+	font-size: 1em;
 }
 
 .emoji-picker input.search:hover {

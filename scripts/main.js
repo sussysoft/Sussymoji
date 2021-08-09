@@ -260,10 +260,9 @@ class EmojiPopup extends Popup {
 			title: "Pick Emoji",
 			body: '<div id="emojiPicker"></div>',
 			icon: "face",
-			init: function (popup) {
-				const div = popup.$body.find("div").get(0);
-				picker = new EmojiPicker("emojiPicker", emojiCarryover);
-			},
+			pad: "none",
+			nomaximize: true,
+			init: () => picker = new EmojiPicker("emojiPicker", emojiCarryover),
 			cancel: true,
 			ok: function () {
 				if (!picker.value) {

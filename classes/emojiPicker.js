@@ -34,6 +34,9 @@ export default class EmojiPicker {
 
 		// Populate container
 		this.#getEmojis();
+
+		// focus / select contents of searchbox for quick searching
+		this.#emojiSearch.select();
 	}
 
 	#generateHTML() {
@@ -46,7 +49,7 @@ export default class EmojiPicker {
 		this.#emojiSearch.addEventListener("keyup", () =>
 			this.#searchInputHandler(this.#emojiSearch.value)
 		);
-		this.#emojiContainer.appendChild(this.#emojiSearch);
+		this.#node.appendChild(this.#emojiSearch);
 		this.#node.appendChild(this.#emojiContainer);
 	}
 
