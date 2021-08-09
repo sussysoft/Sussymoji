@@ -12,6 +12,7 @@ button:not(:disabled) { cursor: pointer; }
     margin: 0 auto;
     position: relative;
     max-width: 100%;
+    box-sizing: border-box;
     border: 20px solid;
     border-image: repeating-linear-gradient(45deg,#be4c4c,#be4040 10px,#9c2e2e 10px,#9e2d2d 20px) 20;
 
