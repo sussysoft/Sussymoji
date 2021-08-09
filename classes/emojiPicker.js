@@ -65,6 +65,22 @@ export default class EmojiPicker {
 		});
 	}
 
+	/** @param {Number} codePoint */
+	#addEmojiToContainer(codePoint) {
+		const symbol = String.fromCodePoint(codePoint);
+		const container = document.createElement("div");
+		container.classList.add("emoji");
+		container.dataset.value = symbol;
+		if (symbol === this.value) container.classList.add("selected");
+		// Add the onclick event to each emoji
+		container.addEventListener("click", () => {
+			this.#emojiClickHandler(container);
+		});
+		const emoji = document.createTextNode(`${symbol}`);
+		container.appendChild(emoji);
+		this.#emojiContainer.appendChild(container);
+	}
+
 	/** @param {String} search */
 	async #searchEmojis(search) {
 		if (search == "") {
@@ -82,42 +98,21 @@ export default class EmojiPicker {
 		)
 			.then((resp) => resp.json())
 			.then((data) => data)
-			.catch((e) => null);
+			.catch(() => null);
 
 		if (result != null) result = result.slice(0, 84);
 		this.#cleanContainer();
 
 		(result ?? []).forEach((/** @type {any} */ res) => {
-			const container = document.createElement("div");
-			container.classList.add("emoji");
-			const symbol = res.character;
-			container.dataset.value = symbol;
-			if (symbol === this.value) container.classList.add("selected");
-			// Add the onclick event to each emoji
-			container.addEventListener("click", () =>
-				this.#emojiClickHandler(container)
-			);
-			const emoji = document.createTextNode(`${symbol}`);
-			container.appendChild(emoji);
-			this.#emojiContainer.appendChild(container);
+			const codePoint = Number.parseInt(`0x${res.codePoint}`);
+			this.#addEmojiToContainer(codePoint);
 		});
 	}
 
 	#getEmojis() {
 		this.#cleanContainer();
 		for (let i = 0x1f600; i <= 0x1f644; i++) {
-			const container = document.createElement("div");
-			container.classList.add("emoji");
-			const symbol = String.fromCodePoint(i);
-			if (symbol === this.value) container.classList.add("selected");
-			container.dataset.value = symbol;
-			// Add the onclick event to each emoji
-			container.addEventListener("click", () =>
-				this.#emojiClickHandler(container)
-			);
-			const emoji = document.createTextNode(`${symbol}`);
-			container.appendChild(emoji);
-			this.#emojiContainer.appendChild(container);
+			this.#addEmojiToContainer(i);
 		}
 	}
 
