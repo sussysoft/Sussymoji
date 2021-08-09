@@ -4,15 +4,14 @@ import { Popup } from "../modules/popup.js";
 
 import { getCookies, leaveCookie } from "../modules/cookie.js";
 
-
 const cookie = getCookies();
 leaveCookie(() => ({
 	size: face.size.toString(),
 	x: face.pos.x.toString(),
-	y: face.pos.y.toString()
+	y: face.pos.y.toString(),
 }));
 
-/** @param {any} obj 
+/** @param {any} obj
  * @param {number} defaultVal */
 function getNumber(obj, defaultVal) {
 	const num = Number(obj);
@@ -44,7 +43,9 @@ const face = {
 		this._img = img;
 		$("#face").attr("src", img.src);
 	},
-	get img() { return this._img; },
+	get img() {
+		return this._img;
+	},
 
 	pos: {
 		x: getNumber(cookie.x, 60),
@@ -52,19 +53,15 @@ const face = {
 	},
 };
 
-
-
-
 function render() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	// need to draw from center so it scales from center
 	const width = face.img.width * face.size;
 	const height = face.img.height * face.size;
-	const left = (face.pos.x/100 * canvas.width) - width / 2;
-	const top = canvas.height - ((face.pos.y/100 * canvas.height)) - (height / 2);
+	const left = (face.pos.x / 100) * canvas.width - width / 2;
+	const top = canvas.height - (face.pos.y / 100) * canvas.height - height / 2;
 
-	
 	// draw  face
 	ctx.globalAlpha = 1;
 	ctx.globalCompositeOperation = "source-over";
@@ -82,7 +79,6 @@ function render() {
 	ctx.globalAlpha = 0.33;
 	ctx.globalCompositeOperation = "source-over";
 	ctx.drawImage(sussy.visor, 0, 0);
-
 }
 
 function init() {
@@ -90,19 +86,19 @@ function init() {
 	canvas.width = sussy.base.width;
 	canvas.height = sussy.base.height;
 
-	container.style.width = (sussy.base.width/4) + "px";
-	container.style.height = (sussy.base.height/4) + "px";
-
-
+	container.style.width = sussy.base.width / 4 + "px";
+	container.style.height = sussy.base.height / 4 + "px";
 
 	// #region CONTROL EVENTS
-	$("#horiz").val(face.pos.x)
+	$("#horiz")
+		.val(face.pos.x)
 		.on("input", function () {
 			face.pos.x = Number($(this).val());
 			render();
 		});
 
-	$("#vert").val(face.pos.y)
+	$("#vert")
+		.val(face.pos.y)
 		.on("input", function () {
 			face.pos.y = Number($(this).val());
 			render();
@@ -112,8 +108,6 @@ function init() {
 		face.size = Number($(this).val());
 		render();
 	});
-
-
 
 	// change color -> generate new colored sussy
 	$("#color")
@@ -126,7 +120,13 @@ function init() {
 			tempCtx.fillStyle = $(this).val().toString();
 
 			// draw sussy
-			tempCtx.drawImage(sussy.base, 0, 0, tempCanvas.width, tempCanvas.height);
+			tempCtx.drawImage(
+				sussy.base,
+				0,
+				0,
+				tempCanvas.width,
+				tempCanvas.height
+			);
 
 			// geting sussy overlay: "source-in" only fills rect where intersecting with sussy
 			tempCtx.globalCompositeOperation = "source-in";
@@ -138,11 +138,23 @@ function init() {
 
 				// draw sussy again
 				tempCtx.globalCompositeOperation = "source-over";
-				tempCtx.drawImage(sussy.base, 0, 0, tempCanvas.width, tempCanvas.height);
+				tempCtx.drawImage(
+					sussy.base,
+					0,
+					0,
+					tempCanvas.width,
+					tempCanvas.height
+				);
 
 				// apply color
 				tempCtx.globalCompositeOperation = "multiply";
-				tempCtx.drawImage(overlay, 0, 0, tempCanvas.width, tempCanvas.height);
+				tempCtx.drawImage(
+					overlay,
+					0,
+					0,
+					tempCanvas.width,
+					tempCanvas.height
+				);
 
 				// draw visor
 				//tempCtx.globalCompositeOperation = "source-over";
@@ -167,39 +179,33 @@ function init() {
 }
 
 Promise.all([
-	getImage("img/austo.png").then(img => face.img = img),
-	getImage("img/sussy.png").then(img => sussy.base = img),
-	getImage("img/visor.png").then(img => sussy.visor = img),
+	getImage("img/austo.png").then((img) => (face.img = img)),
+	getImage("img/sussy.png").then((img) => (sussy.base = img)),
+	getImage("img/visor.png").then((img) => (sussy.visor = img)),
 ]).then(() => init());
-
-
-
-
-
 
 // #region PICKING FACE
 class FaceTypePopup extends Popup {
-	constructor() {		
+	constructor() {
 		super({
 			classes: "face-type-popup",
 			title: "Face Type",
 			icon: "face",
 			ok: {
 				label: "Emoji",
-				click: () => new EmojiPopup()
+				click: () => new EmojiPopup(),
 			},
 			cancel: {
 				label: "Image",
 				click: () => new ImagePopup(),
-				class: "accent"
-			}
+				class: "accent",
+			},
 		});
 	}
 }
 
 class ImagePopup extends Popup {
 	constructor() {
-		
 		/** @type {HTMLInputElement} */ let input;
 		/** @type {HTMLImageElement} */ let img;
 
@@ -210,61 +216,61 @@ class ImagePopup extends Popup {
 			overflow: true,
 			icon: "portrait",
 			cancel: true,
-			init: function(popup) {
+			init: function (popup) {
 				// @ts-ignore
-				input = popup.$body.find("input[type='file']").on("change", function() {
-					if (input.files && input.files[0]) {
-						const url = URL.createObjectURL(input.files[0]); 
-						console.log(url);
-						img.src = url;
-						
-					}
-				}).get(0);
+				input = popup.$body
+					.find("input[type='file']")
+					.on("change", function () {
+						if (input.files && input.files[0]) {
+							const url = URL.createObjectURL(input.files[0]);
+							console.log(url);
+							img.src = url;
+						}
+					})
+					.get(0);
 				// @ts-ignore
 				img = popup.$body.find("img").get(0);
-
-
 			},
 			ok: {
-				click: function() {		
+				click: function () {
 					if (input.files && input.files[0]) {
-						const url = URL.createObjectURL(input.files[0]); 
+						const url = URL.createObjectURL(input.files[0]);
 						console.log(url);
 						img.src = url;
-						return getImage(url).then(result => {
+						return getImage(url).then((result) => {
 							face.img = result;
 							render();
-						})
-					}
-					else {
+						});
+					} else {
 						return false;
 					}
-				}
-			}
+				},
+			},
 		});
 	}
 }
 
+/** @type {String} emojiCarryover */
+var emojiCarryover;
 class EmojiPopup extends Popup {
 	constructor() {
-
 		/** @type {EmojiPicker} */
 		let picker;
 		super({
 			title: "Pick Emoji",
-			body: "<div></div>",
+			body: '<div id="emojiPicker"></div>',
 			icon: "face",
-			init: function(popup) {
+			init: function (popup) {
 				const div = popup.$body.find("div").get(0);
-				picker = new EmojiPicker(div);
+				picker = new EmojiPicker("emojiPicker", emojiCarryover);
 			},
 			cancel: true,
-			ok: function() {
+			ok: function () {
 				if (!picker.value) {
 					Popup.error("No Emoji Selected");
 					return false;
 				}
-
+				emojiCarryover = picker.value;
 				// #region converting emoji to image
 				const canvas = document.createElement("canvas");
 				const ctx = canvas.getContext("2d");
@@ -275,32 +281,38 @@ class EmojiPopup extends Popup {
 				ctx.textBaseline = "middle";
 				ctx.fillStyle = "black";
 				ctx.font = "256px Arial";
-				
+
 				// measure text to get bounding box
 				const metrics = ctx.measureText(picker.value);
-				let height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-				
+				let height =
+					metrics.actualBoundingBoxAscent +
+					metrics.actualBoundingBoxDescent;
+
 				// fill text then extract data within bounding box
 				ctx.fillText(picker.value, canvas.width / 2, canvas.height / 2);
-				const data = ctx.getImageData(canvas.width / 2 - metrics.width / 2, canvas.height / 2 - metrics.actualBoundingBoxAscent, metrics.width, height);
-				
+				const data = ctx.getImageData(
+					canvas.width / 2 - metrics.width / 2,
+					canvas.height / 2 - metrics.actualBoundingBoxAscent,
+					metrics.width,
+					height
+				);
+
 				// now rescale canvas and put image data back
 				canvas.width = metrics.width;
 				canvas.height = height;
 				ctx.putImageData(data, 0, 0);
 
-				return getImage(canvas.toDataURL()).then(result => {
+				return getImage(canvas.toDataURL()).then((result) => {
 					face.img = result;
 					render();
-				})
+				});
 				// #endregion
-			}
-		})
+			},
+		});
 	}
 }
 
-
-$("#face").on("click", function() {
+$("#face").on("click", function () {
 	new FaceTypePopup();
-})
+});
 // #endreigon
