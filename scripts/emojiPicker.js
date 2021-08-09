@@ -1,5 +1,5 @@
 export default class EmojiPicker {
-	/** @type {HTMLDivElement} #node */
+	/** @type {HTMLElement} #node */
 	#node;
 	/** @type {HTMLDivElement} #emojiContainer */
 	#emojiContainer;
@@ -21,7 +21,6 @@ export default class EmojiPicker {
 	/** @param {String} id Id of DOM element to generate the picker in */
 	constructor(id) {
 		// Get DOM nodes
-		// @ts-ignore
 		this.#node = document.getElementById(id);
 		this.#generateHTML();
 
@@ -36,13 +35,9 @@ export default class EmojiPicker {
 			else this.#hideEmojiContainer();
 		});
 
-		this.#emojiContainer.addEventListener("click", (e) =>
-			e.stopPropagation()
-		);
+		this.#emojiContainer.addEventListener("click", e => e.stopPropagation());
 
-		document.addEventListener("click", (e) => {
-			this.#hideEmojiContainer();
-		});
+		document.addEventListener("click", () => this.#hideEmojiContainer());
 	}
 
 	#generateHTML() {
