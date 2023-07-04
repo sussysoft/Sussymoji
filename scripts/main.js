@@ -38,6 +38,9 @@ const face = {
 	/** multiplier that gets applied to img width/height */
 	size: getNumber(cookie.size, 1),
 
+
+	flipped: false,
+
 	/** @param {HTMLImageElement} img */
 	set img(img) {
 		this._img = img;
@@ -63,17 +66,27 @@ function render() {
 	const top = canvas.height - (face.pos.y / 100) * canvas.height - height / 2;
 
 	// draw  face
+	if(face.flipped) {
+		ctx.save();
+		//doesnt work also not consistent when size changes
+		ctx.translate((left + width), 0);
+		ctx.scale(-1, 1);
+	}
+
 	ctx.globalAlpha = 1;
 	ctx.globalCompositeOperation = "source-over";
 	ctx.drawImage(face.img, left, top, width, height);
 
+	// reset transfrom to normal
+	ctx.restore();
+
 	// clip to visor
 	ctx.globalCompositeOperation = "destination-in";
-	ctx.drawImage(sussy.visor, 0, 0);
+	//ctx.drawImage(sussy.visor, 0, 0);
 
 	// re-draw sussy behind
 	ctx.globalCompositeOperation = "destination-over";
-	ctx.drawImage(sussy.colored, 0, 0);
+	//ctx.drawImage(sussy.colored, 0, 0);
 
 	// draw visor on top (reduced opacity)
 	ctx.globalAlpha = 0.33;
@@ -168,6 +181,17 @@ function init() {
 		})
 		.trigger("change");
 
+	// flips the face (not the entire sussymoji)
+	$("#flip").on("click", function () {
+		if(face.flipped) {
+			face.flipped = false;
+		} else {
+			face.flipped = true;
+		}
+		render();
+	})
+	
+	
 	// download -> create link to data url then click it
 	$("#btnDownload").on("click", function () {
 		const link = document.createElement("a");
