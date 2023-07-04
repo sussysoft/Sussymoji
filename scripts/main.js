@@ -211,7 +211,7 @@ class ImagePopup extends Popup {
 
 		super({
 			title: "Upload Image",
-			body: "<img></img><input type='file' accept='image/png, image/jpeg' class='marg-top-100' />",
+			body: "<img></img><input type='file' accept='image/png, image/jpeg' class='marg-top-100' />Enter image URL<input type='text' id='input2'>",
 			flex: "column",
 			overflow: true,
 			icon: "portrait",
@@ -230,6 +230,8 @@ class ImagePopup extends Popup {
 					.get(0);
 				// @ts-ignore
 				img = popup.$body.find("img").get(0);
+
+
 			},
 			ok: {
 				click: function () {
@@ -241,9 +243,16 @@ class ImagePopup extends Popup {
 							face.img = result;
 							render();
 						});
-					} else {
-						return false;
-					}
+					} else if($("#input2").val()) {
+                        const url = $("#input2").val().toString();
+						img.src = url;
+                        return getImage(url).then((result) => {
+							face.img = result;
+							render();
+					});
+                    } else {
+                        return false;
+                    }
 				},
 			},
 		});
