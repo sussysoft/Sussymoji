@@ -10,36 +10,35 @@
     <link rel="stylesheet" href="styles/style.css"></style>
 
     <script defer="defer" src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script defer="defer" type="module" src="scripts/main.js"></script>
+    <script defer="defer" type="module" src="src/main.js"></script>
 </head>
 <body>
+
     <div id="container">
         <canvas></canvas>
         <input id="vert" type="range" min="55" max="75" step="1" />
         <input id="horiz" type="range" min="50" max="80" step="1" />
-    </div>
 
+        <div id="controls" class="flex row">
 
-    <div id="controls" class="flex row">
-
-        <div>
-            <label>Face</label>
-            <img id="face"/>
-        </div>
-        <div>
-            <label>Size</label>
-            <input id="size" type="range" min="0.1" max="10" step="0.1" value="1"  />
-        </div>
-        <div>
-            <label>Color</label>
-            <input id="color" type="color" value="#ff0000" />
-        </div>
-        <div>
-            <button type="button" id="flip">Flip Face</button>
-        </div>
-
-        <button id="btnDownload">DOWNLOAD</button>
-    </div>
+            <div>
+                <label>Face</label>
+                <img id="face"/>
+            </div>
+            <div>
+                <label>Size</label>
+                <input id="size" type="range" min="0.1" max="10" step="0.1" value="1"  />
+            </div>
+            <div>
+                <label>Color</label>
+                <input id="color" type="color" value="#ff0000" />
+            </div>
     
+            <button id="btnDownload">DOWNLOAD</button>
+        </div>
+        
+    </div>    
+
+
 </body>
 </html>
