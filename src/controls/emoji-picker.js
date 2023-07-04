@@ -1,4 +1,4 @@
-import { importCSS } from "../modules/css.js";
+import { importCSS } from "../util/css.js";
 importCSS("styles/emojipicker.css");
 
 export default class EmojiPicker {

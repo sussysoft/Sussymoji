@@ -23,5 +23,5 @@
       "include": ["jquery"]
     },
 
-    "exclude": ["plugins"]
+    "exclude": ["src/plugins"]
   }

@@ -1,5 +1,5 @@
-import "../plugins/jquery-ui-1.12.1.js";
-import { importCSS } from "./css.js";
+import "../../plugins/jquery-ui-1.12.1.js";
+import { importCSS } from "../../util/css.js";
 importCSS("styles/popup.css")
 
 
@@ -483,7 +483,8 @@ export class Popup {
      * @returns 
      */
     static success(message, timeout) {
-        return this.notify(message, "success", timeout);
+        this.notify(message, "success", timeout);
+        return true;
     }
 
     
@@ -493,7 +494,8 @@ export class Popup {
      * @returns 
      */
     static error(message, timeout) {
-        return this.notify(message, "error", timeout);
+        this.notify(message, "error", timeout);
+        return false;
     }
     // #endregion notifications
 
