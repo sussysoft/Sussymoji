@@ -206,53 +206,54 @@ class FaceTypePopup extends Popup {
 
 class ImagePopup extends Popup {
 	constructor() {
-		/** @type {HTMLInputElement} */ let input;
+		/** @type {HTMLInputElement} */ let fileInput;
+		/** @type {HTMLInputElement} */ let urlInput;
 		/** @type {HTMLImageElement} */ let img;
 
 		super({
-			title: "Upload Image",
-			body: "<img></img><input type='file' accept='image/png, image/jpeg' class='marg-top-100' />Enter image URL<input type='text' id='input2'>",
+			title: "Select Image",
+			body: (
+				`<div class='center-align'>Upload file or enter URL...</div>
+				<img></img>
+				<input type='file' accept='image/png, image/jpeg' class='marg-top-100' />
+				<hr />
+				<input type='text' placeholder='Image URL...'>`
+			),
 			flex: "column",
 			overflow: true,
-			icon: "portrait",
+			icon: "photo",
 			cancel: true,
 			init: function (popup) {
 				// @ts-ignore
-				input = popup.$body
-					.find("input[type='file']")
-					.on("change", function () {
-						if (input.files && input.files[0]) {
-							const url = URL.createObjectURL(input.files[0]);
-							console.log(url);
-							img.src = url;
-						}
-					})
-					.get(0);
+				fileInput = popup.$body.find("input[type='file']").on("change", function () {
+					if (fileInput?.files && fileInput.files[0]) {
+						img.src = URL.createObjectURL(fileInput.files[0]);
+						urlInput.value = "";
+					}
+				}).get(0);
+
+				// @ts-ignore 
+				urlInput = popup.$body.find("input[type='text']").on("change", function() {
+					if (urlInput?.value) img.src = urlInput.value;
+				}).get(0);
+
 				// @ts-ignore
 				img = popup.$body.find("img").get(0);
 
-
 			},
 			ok: {
-				click: function () {
-					if (input.files && input.files[0]) {
-						const url = URL.createObjectURL(input.files[0]);
-						console.log(url);
-						img.src = url;
-						return getImage(url).then((result) => {
-							face.img = result;
-							render();
-						});
-					} else if($("#input2").val()) {
-                        const url = $("#input2").val().toString();
-						img.src = url;
-                        return getImage(url).then((result) => {
-							face.img = result;
-							render();
-					});
-                    } else {
-                        return false;
-                    }
+				click: async function () {
+					// file provided -> convert to base64					
+					// url provided -> map directly to img src
+					const url = fileInput?.files && fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : urlInput?.value;
+					if (url) {
+						face.img = await getImage(img.src = url);
+						render();
+						return true;
+					}
+
+					// neither file nor url provided -> prevent close
+					return false;
 				},
 			},
 		});
