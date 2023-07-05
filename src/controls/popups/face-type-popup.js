@@ -32,14 +32,16 @@ class ImagePopup extends Popup {
 		/** @type {HTMLInputElement} */ let urlInput;
 		/** @type {HTMLImageElement} */ let img;
 
+		
+
 		super({
 			title: "Select Image",
 			body: (
 				`<div class='center-align'>Upload file or enter URL...</div>
-				<img></img>
+				<img/>
 				<input type='file' accept='image/png, image/jpeg' class='marg-top-100' />
-				<hr />
-				<input type='text' placeholder='Image URL...'>`
+				<input type='text' placeholder='Image URL...'>
+				<div id='error' style='color:red'></div>`
 			),
 			flex: "column",
 			overflow: true,
@@ -71,9 +73,20 @@ class ImagePopup extends Popup {
 					const url = fileInput?.files && fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : urlInput?.value;
 					if (url) {
 						face.setImage(await getImage(img.src = url));
+						if(face.img.width > face.maxFaceSize.w || face.img.height > face.maxFaceSize.h) {
+							if($("#error").is(':empty')) {
+								$("#error").append(`Please enter an image with a max size of ${face.maxFaceSize.w}x${face.maxFaceSize.h}`);
+								return false;
+							}
+
+							// pulse the error message to draw attention to why popup won't close
+							$("#error").css("opacity", "0");
+							$("#error").fadeTo(1000, 1);
+
+							return false;
+						}
 						return true;
 					}
-
 					// neither file nor url provided -> prevent close
 					return false;
 				},

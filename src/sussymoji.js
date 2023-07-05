@@ -43,7 +43,7 @@ export class Sussymoji {
             y: getNumber(cookie.scale_y, 1),
         };
 
-        
+
         this.container = document.getElementById(containerID);
         const canvas = document.getElementsByTagName("canvas")[0];
         const ctx = canvas.getContext("2d");
@@ -52,13 +52,19 @@ export class Sussymoji {
         this.ctx = ctx;
     }
 
-
+    // add to constructor maybe with params maybe?
+    maxFaceSize = {
+        w: 1024,
+        h: 1024
+    }
 	/** 
 	 * @param {HTMLImageElement} img 
 	 * @param {boolean?} _render
 	*/
 	setImage(img, _render = true) {
-		this._img = img;
+        this._img = img;
+		if(img.width > this.maxFaceSize.w || img.height > this.maxFaceSize.h) return;
+
 		$("#face").attr("src", img.src);
 		if (_render) this.render();
 	}
