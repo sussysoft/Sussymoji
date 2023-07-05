@@ -16,6 +16,9 @@ leaveCookie(() => ({
 const sussy = new Sussymoji(cookie);
 sussy.load().then(() => {
 
+	// (loads mini icon for face button) sussy.setImage() not working ? (im goofy?)
+	$("#face").attr("src", sussy.img.src);
+
 	// hiding everything until images load
 	document.body.style.display = "block";
 
