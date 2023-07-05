@@ -2,18 +2,29 @@
 import { getCookies, leaveCookie } from "./util/cookie.js";
 import { FaceTypePopup } from "./controls/popups/face-type-popup.js";
 import { Sussymoji } from "./sussymoji.js";
+import { getNumber } from "./util/math.js";
 
 const cookie = getCookies();
 leaveCookie(() => ({
-	size: sussy.size.toString(),
 	x: sussy.pos.x.toString(),
 	y: sussy.pos.y.toString(),
 	scale_x: sussy.scale.x.toString(),	
 	scale_y: sussy.scale.y.toString(),
 }));
 
+
 // load sussy, then initialize UI events
-const sussy = new Sussymoji(cookie);
+const sussy = new Sussymoji({
+	pos: {
+		x: getNumber(cookie.x, 60),
+		y: getNumber(cookie.y, 60),
+	},
+	scale: {
+		x: getNumber(cookie.scale_x, 1),
+		y: getNumber(cookie.scale_y, 1),
+	}
+});
+
 sussy.load().then(() => {
 
 	// hiding everything until images load
@@ -37,11 +48,6 @@ sussy.load().then(() => {
 
 	$("#scale_vert").val(sussy.scale.y).on("input", function () {
 		sussy.scale.y = Number($(this).val());
-		sussy.render();
-	});
-
-	$("#size").on("input", function () {
-		sussy.size = Number($(this).val());
 		sussy.render();
 	});
 

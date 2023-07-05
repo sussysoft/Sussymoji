@@ -32,7 +32,10 @@ class ImagePopup extends Popup {
 		/** @type {HTMLInputElement} */ let urlInput;
 		/** @type {HTMLImageElement} */ let img;
 
-		
+		/** using this flag to avoid async issue where img src is set but not loaded in yet */
+		let loaded = false;
+		/** @type {HTMLImageElement} */
+		let temp_img;
 
 		super({
 			title: "Select Image",
@@ -40,55 +43,59 @@ class ImagePopup extends Popup {
 				`<div class='center-align'>Upload file or enter URL...</div>
 				<img/>
 				<input type='file' accept='image/png, image/jpeg' class='marg-top-100' />
-				<input type='text' placeholder='Image URL...'>
-				<div id='error' style='color:red'></div>`
+				<input type='text' placeholder='Image URL...' class='marg-top-100'>`
 			),
 			flex: "column",
-			overflow: true,
 			icon: "photo",
 			cancel: true,
 			init: function (popup) {
+	
+				img = popup.$body.find("img").get(0);
+
+				/** 
+				 * validates image before setting it
+				 * @param {string} src 
+				 * */
+				async function setImage(src) {
+					loaded = false;
+					temp_img = await getImage(src);
+					if(temp_img.width > face.maxFaceSize.x || temp_img.height > face.maxFaceSize.y) {
+						return Popup.error(`Image exceeds max size of ${face.maxFaceSize.x}x${face.maxFaceSize.y}`);
+					}
+				
+					img.src = src;
+					return loaded = true;
+				}
+
 				fileInput = /** @type {HTMLInputElement} */ (
-                    popup.$body.find("input[type='file']").on("change", function () {
-                        if (fileInput?.files && fileInput.files[0]) {
-                            img.src = URL.createObjectURL(fileInput.files[0]);
+                    popup.$body.find("input[type='file']").on("change", async function () {
+                        if (fileInput?.files && fileInput.files[0] && await setImage(URL.createObjectURL(fileInput.files[0]))) {
+							// clear url input if file input is being used
                             urlInput.value = "";
-                        }
+                        } else {
+							fileInput.value = null;
+						}
                     }).get(0)
                 );
 
 				urlInput = /** @type {HTMLInputElement} */ (
-                    popup.$body.find("input[type='text']").on("change", function() {
-                        if (urlInput?.value) img.src = urlInput.value;
+                    popup.$body.find("input[type='text']").on("change", async function() {
+                        if (urlInput?.value && await setImage(urlInput.value)) {
+							// clear file input if url input is being used
+							fileInput.value = null;
+						} else {
+							urlInput.value = "";
+						}
                     }).get(0)
                 );
 
-				img = popup.$body.find("img").get(0);
 
 			},
 			ok: {
-				click: async function () {
-					// file provided -> convert to base64					
-					// url provided -> map directly to img src
-					const url = fileInput?.files && fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : urlInput?.value;
-					if (url) {
-						face.setImage(await getImage(img.src = url));
-						if(face.img.width > face.maxFaceSize.w || face.img.height > face.maxFaceSize.h) {
-							if($("#error").is(':empty')) {
-								$("#error").append(`Please enter an image with a max size of ${face.maxFaceSize.w}x${face.maxFaceSize.h}`);
-								return false;
-							}
-
-							// pulse the error message to draw attention to why popup won't close
-							$("#error").css("opacity", "0");
-							$("#error").fadeTo(1000, 1);
-
-							return false;
-						}
-						return true;
-					}
-					// neither file nor url provided -> prevent close
-					return false;
+				click: async function () {	
+					if (!temp_img) return Popup.error("No image selected");		
+					face.setImage(temp_img);	
+					return true;
 				},
 			},
 		});
