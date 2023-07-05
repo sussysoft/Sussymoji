@@ -110,6 +110,16 @@ button:not(:disabled) { cursor: pointer; }
     transform-origin: top right;
     transform: rotate(-90deg);
  }
+ #scale_horiz {
+    left: 1.25em;
+    bottom: 6em;
+ }
+ #scale_vert {
+    left: 0.25em;
+    bottom: 6em;
+    transform-origin: top left;
+    transform: rotate(-90deg);
+ }
 /* #endregion */
 
 

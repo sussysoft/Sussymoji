@@ -38,6 +38,11 @@ export class Sussymoji {
             y: getNumber(cookie.y, 60),
         };
 
+        this.scale = {
+            x: getNumber(cookie.scale_x, 1),
+            y: getNumber(cookie.scale_y, 1),
+        };
+
         
         this.container = document.getElementById(containerID);
         const canvas = document.getElementsByTagName("canvas")[0];
@@ -68,17 +73,21 @@ export class Sussymoji {
         
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-        // need to draw from center so it scales from center
-        const width = this.img.width * this.size;
-        const height = this.img.height * this.size;
-        const left = (this.pos.x / 100) * canvas.width - width / 2;
-        const top = canvas.height - (this.pos.y / 100) * canvas.height - height / 2;
-    
-        // draw  face
+        // #region drawing face
+        // need to translate to center point so it scales from center    
+        ctx.translate((
+            this.pos.x / 100) * canvas.width, 
+            canvas.height - (this.pos.y / 100) * canvas.height
+        );
+        ctx.scale(this.scale.x, this.scale.y);
+
         ctx.globalAlpha = 1;
-        ctx.globalCompositeOperation = "source-over";
-        ctx.drawImage(this.img, left, top, width, height);
-    
+        ctx.drawImage(this.img, -this.img.width / 2, -this.img.height / 2, this.img.width, this.img.height);
+  
+        // reset transform
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        // #endregion
+
         // clip to visor
         ctx.globalCompositeOperation = "destination-in";
         ctx.drawImage(sussy.visor, 0, 0);
@@ -91,6 +100,8 @@ export class Sussymoji {
         ctx.globalAlpha = 0.33;
         ctx.globalCompositeOperation = "source-over";
         ctx.drawImage(sussy.visor, 0, 0);
+    
+        
     }
 
 
