@@ -108,7 +108,7 @@ export class Sussymoji {
     /** loads images, then scales canvas/container to fit */
     async load() {
         // TODO: store previous image in cookie isntead of always loading austo?
-        this._img = await getImage("img/austo.png");
+        this.setImage(await getImage("img/austo.png"), false);
         sussy.base = await getImage("img/sussy.png");
         sussy.visor = await getImage("img/visor.png");
 
