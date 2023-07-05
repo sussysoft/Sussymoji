@@ -2,13 +2,7 @@
 import { getImage } from "./util/img.js";
 
 
-/**
- * @param {any} obj
- * @param {number} defaultVal */
-function getNumber(obj, defaultVal) {
-	const num = Number(obj);
-	return !isNaN(num) ? num : defaultVal;
-}
+
 
 /** @type {Object<string,HTMLImageElement>} */
 const sussy = {
@@ -18,33 +12,22 @@ const sussy = {
 };
 
 
-
 export class Sussymoji {
 
     /** @type {HTMLImageElement} */
 	_img = null;
 
-    /**
-     * @param { Object<string,string> } cookie 
-     * @param { string } containerID
-     */
-    constructor(cookie, containerID = "container") {     
-   
-        /** multiplier that gets applied to img width/height */
-        this.size = getNumber(cookie.size, 1);
-        /** current offset for rendering  */
-        this.pos = {
-            x: getNumber(cookie.x, 60),
-            y: getNumber(cookie.y, 60),
-        };
+    /** @param {SussymojiOptions?} options */
+    constructor(options) {     
+       
+        /** current render offset */
+        this.pos = options?.pos ?? { x: 0, y: 0 };
+        /** current render scale */
+        this.scale = options?.scale ?? { x: 1, y: 1 };
+        /** maximum size allowed for uploading images */
+        this.maxFaceSize = options?.maxFaceSize ?? { x: 1024, y: 1024 }
 
-        this.scale = {
-            x: getNumber(cookie.scale_x, 1),
-            y: getNumber(cookie.scale_y, 1),
-        };
-
-        
-        this.container = document.getElementById(containerID);
+        this.container = document.getElementById(options?.containerID || "container");
         const canvas = document.getElementsByTagName("canvas")[0];
         const ctx = canvas.getContext("2d");
         ctx.textAlign = "center";
@@ -53,12 +36,13 @@ export class Sussymoji {
     }
 
 
+
 	/** 
 	 * @param {HTMLImageElement} img 
 	 * @param {boolean?} _render
 	*/
 	setImage(img, _render = true) {
-		this._img = img;
+        this._img = img;
 		$("#face").attr("src", img.src);
 		if (_render) this.render();
 	}
@@ -161,3 +145,14 @@ export class Sussymoji {
 			this.render();
     }
 };
+
+
+
+/** @typedef {import("./util/math.js").Vector} Vector */
+
+/** 
+ * @typedef {object}  SussymojiOptions
+ * @property {Vector?} [pos]
+ * @property {Vector?} [scale]
+ * @property {Vector?} [maxFaceSize]
+ * @property {string?} [containerID] */

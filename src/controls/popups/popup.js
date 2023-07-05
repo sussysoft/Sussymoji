@@ -466,11 +466,12 @@ export class Popup {
         $this.on("click", close);
 
 
+        if (isNaN(timeout)) timeout = 2000;
+
         // if timeout, auto-close after time reached, otherwise require manual click to close
-        // (timeout defaults to 2000, but can be set to <0 to disable)
-        if ((isNaN(timeout) ? 2000 : timeout) > 0) {
-            setTimeout(close, timeout);
-        }
+        // (timeout defaults to 2000, but can be set to <= 0 to disable)
+        if (timeout > 0) setTimeout(close, timeout);
+        
     }
 
     static closeAllNotifications() {

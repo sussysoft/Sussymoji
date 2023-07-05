@@ -6,6 +6,7 @@ html {
 body {
      font-family: 'Open Sans', sans-serif;
      display: none;
+     margin: 0;
 }
 button:not(:disabled) { cursor: pointer; }
 
